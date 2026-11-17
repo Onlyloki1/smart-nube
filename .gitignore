@@ -1,0 +1,4 @@
+node_modules/
+nube.json
+*-test.json
+.env
