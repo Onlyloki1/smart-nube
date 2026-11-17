@@ -101,6 +101,30 @@ http.createServer(async (req, res) => {
       return json(res, 200, { sesiones: items });
     }
 
+    // ---- política de privacidad (la pide la Chrome Web Store) ----
+    if (req.method === "GET" && p === "/privacy") {
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Access-Control-Allow-Origin": "*" });
+      return res.end(`<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Política de privacidad — Smart Acquisition</title>
+<style>body{max-width:760px;margin:40px auto;padding:0 20px;font:16px/1.6 system-ui,"Segoe UI",sans-serif;color:#1a1a1a}h1{font-size:26px}h2{font-size:18px;margin-top:28px}small{color:#666}</style>
+</head><body>
+<h1>Política de privacidad — Smart Acquisition "Conectar cuenta"</h1>
+<small>Última actualización: 17/11/2026</small>
+<h2>Qué hace la extensión</h2>
+<p>La extensión permite que una persona (el "setter") conecte <b>su propia</b> cuenta de Instagram a la herramienta Smart Acquisition del dueño que se la pidió. La persona la instala y la usa de forma voluntaria.</p>
+<h2>Qué datos usa</h2>
+<p>Al tocar "Conectar cuenta", la extensión lee las <b>cookies de sesión de instagram.com</b> y el <b>nombre de usuario de Instagram</b> de la persona, junto con el <b>nombre y teléfono</b> que la persona escribe en la extensión. Esos datos se usan con un único fin: conectar esa cuenta a la herramienta del dueño.</p>
+<h2>Cómo se manejan</h2>
+<p>Los datos se <b>cifran en el dispositivo</b> de la persona (AES-256-GCM) antes de salir. Se envían a un servidor de relay propio que <b>no puede descifrarlos</b>; solo la herramienta del dueño, en su computadora, los descifra. Los datos cifrados se borran del relay automáticamente a las 2 horas.</p>
+<h2>Qué NO hacemos</h2>
+<p>No vendemos ni compartimos los datos con terceros. No se usan para publicidad. No se recopila ningún dato fuera del fin descrito.</p>
+<h2>Permisos</h2>
+<p><b>cookies</b> y acceso a instagram.com: para leer la sesión y conectar la cuenta. <b>storage</b>: para recordar el nombre, teléfono y email ingresados. Acceso al dominio del relay: para enviar la sesión cifrada.</p>
+<h2>Contacto</h2>
+<p>Ante cualquier consulta sobre tus datos, escribí a quien te compartió la extensión (el dueño de la cuenta de Smart Acquisition).</p>
+</body></html>`);
+    }
+
     if (p === "/") return json(res, 200, { ok: true, servicio: "smart-nube" });
     json(res, 404, { error: "no existe" });
   } catch (e) { json(res, 500, { error: e.message }); }
