@@ -85,11 +85,11 @@ http.createServer(async (req, res) => {
 
     // ---- RELAY: la extensión del setter sube la sesión (solo el mail del dueño) ----
     if (req.method === "POST" && p === "/subir") {
-      const { email, sesion, usuario, userId } = await cuerpo(req);
+      const { email, sesion, usuario, userId, setterNombre, setterTelefono } = await cuerpo(req);
       const e = String(email || "").trim().toLowerCase();
       if (!e || !sesion) return json(res, 400, { error: "faltan email o sesión" });
       if (!o.usuarios[e] || !o.usuarios[e].activo) return json(res, 403, { error: "ese dueño no existe o está deshabilitado" });
-      o.colas[e] = limpiar(o.colas[e]); o.colas[e].push({ sesion, usuario: usuario || "", userId: userId || "", ts: Date.now() });
+      o.colas[e] = limpiar(o.colas[e]); o.colas[e].push({ sesion, usuario: usuario || "", userId: userId || "", setterNombre: String(setterNombre || "").slice(0, 60), setterTelefono: String(setterTelefono || "").slice(0, 30), ts: Date.now() });
       guardar(o);
       return json(res, 200, { ok: true });
     }
